@@ -2,6 +2,7 @@ const cards = document.getElementById('cards');
 const items = document.getElementById('items');
 const footer = document.getElementById('footer');
 const comprar = document.getElementById('comprar');
+const cantidad = document.getElementById('cantidadProductos');
 const templateCard = document.getElementById('template-card').content;
 const templateFooter = document.getElementById('template-footer').content;
 const templateCarrito = document.getElementById('template-carrito').content;
@@ -11,7 +12,7 @@ let carrito = {};
 
 document.addEventListener('DOMContentLoaded', e => {
     fetchData();
-    if(localStorage.getItem('carrito')) {
+    if (localStorage.getItem('carrito')) {
         carrito = JSON.parse(localStorage.getItem('carrito'))
         pintarCarrito()
     }
@@ -31,11 +32,32 @@ const fetchData = async () => {
     try {
         const res = await fetch('./JSON/api.json')
         const data = await res.json()
-        pintarCards(data)
+
+        pintarCards(data);
+        // Filtrado
+        const formulario = document.querySelector('#formulario');
+        const boton = document.querySelector('#boton');
+        const refresh = document.querySelector('#refresh')
+
+        const filtro = () => {
+            cards.innerHTML = '';
+            const consulta = formulario.value.toLowerCase();
+            const filtrado = data.filter(p => p.tipo.toLowerCase() === consulta);
+            pintarCards(filtrado);
+        }
+        
+        boton.addEventListener('click', filtro)
+        refresh.addEventListener('click', e => {
+            cards.innerHTML = '';
+            pintarCards(data);
+        })
+
+
     } catch (error) {
         console.log(error)
     }
 }
+
 
 // Pintar productos:
 const pintarCards = data => {
@@ -50,6 +72,8 @@ const pintarCards = data => {
     });
     cards.appendChild(fragment)
 }
+
+
 
 // Agregar al carrito:
 const addCarrito = e => {
@@ -72,7 +96,9 @@ const setCarrito = item => {
         producto.cantidad = carrito[producto.id].cantidad + 1;
     }
 
-    carrito[producto.id] = {...producto}
+    carrito[producto.id] = {
+        ...producto
+    }
 
     pintarCarrito();
 }
@@ -80,7 +106,7 @@ const setCarrito = item => {
 const pintarCarrito = () => {
     items.innerHTML = ''
 
-    Object.values(carrito).forEach( producto => {
+    Object.values(carrito).forEach(producto => {
         templateCarrito.querySelector('th').textContent = producto.id;
         templateCarrito.querySelectorAll('td')[0].textContent = producto.nombre;
         templateCarrito.querySelectorAll('td')[1].textContent = producto.cantidad;
@@ -90,17 +116,18 @@ const pintarCarrito = () => {
 
         const clone = templateCarrito.cloneNode(true);
         fragment.appendChild(clone);
-    }) 
+    })
     items.appendChild(fragment)
     pintarFooter();
     pintarBtnCompra();
+    cantidadProductos();
 
-    localStorage.setItem('carrito',JSON.stringify(carrito))
+    localStorage.setItem('carrito', JSON.stringify(carrito))
 }
 
-const pintarFooter = () =>  {
-    footer.innerHTML='';
-    if(Object.keys(carrito).length === 0) {
+const pintarFooter = () => {
+    footer.innerHTML = '';
+    if (Object.keys(carrito).length === 0) {
         footer.innerHTML = `
         <th scope="row" colspan="5" class="ps-5">Seleccione productos</th>
         `
@@ -108,12 +135,17 @@ const pintarFooter = () =>  {
         return
     }
 
-    const nCantidad = Object.values(carrito).reduce((acc , {cantidad}) => acc + cantidad,0);
-    const nPrecio = Object.values(carrito).reduce((acc , {cantidad, precio}) => acc + cantidad * precio,0);
+    const nCantidad = Object.values(carrito).reduce((acc, {
+        cantidad
+    }) => acc + cantidad, 0);
+    const nPrecio = Object.values(carrito).reduce((acc, {
+        cantidad,
+        precio
+    }) => acc + cantidad * precio, 0);
     templateFooter.querySelectorAll('td')[0].textContent = nCantidad;
     templateFooter.querySelector('span').textContent = nPrecio;
 
-    const clone =templateFooter.cloneNode(true);
+    const clone = templateFooter.cloneNode(true);
     fragment.appendChild(clone);
     footer.appendChild(fragment);
 
@@ -137,13 +169,16 @@ const pintarBtnCompra = () => {
     fragment.appendChild(clone);
     comprar.appendChild(fragment);
 
-    const nPrecio = Object.values(carrito).reduce((acc , {cantidad, precio}) => acc + cantidad * precio,0);
+    const nPrecio = Object.values(carrito).reduce((acc, {
+        cantidad,
+        precio
+    }) => acc + cantidad * precio, 0);
 
     const btnComprar = document.getElementById('comprar-carrito')
     btnComprar.addEventListener('click', () => {
         Swal.fire({
             title: '¿Continuar el pago?',
-            text: "Su total es $" + nPrecio ,
+            text: "Su total es $" + nPrecio,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -155,6 +190,7 @@ const pintarBtnCompra = () => {
                     position: 'top-end',
                     icon: 'success',
                     title: 'Pago exitoso!',
+                    text: "Gracias por su confianza :)",
                     showConfirmButton: false,
                     timer: 1500,
                     timerProgressBar: true,
@@ -166,23 +202,34 @@ const pintarBtnCompra = () => {
     })
 }
 
+// Mostrar cantidad de productos en Navbar
+const cantidadProductos = () => {
+    cantidad.innerHTML = '';
+    const nCantidad = Object.values(carrito).reduce((acc, {
+        cantidad
+    }) => acc + cantidad, 0);
+    cantidad.innerHTML = `(${nCantidad})`
+}
+
 
 
 
 const btnAccion = e => {
     // AUMENTAR PRODUCTO
-    if(e.target.classList.contains('btn-info')){
+    if (e.target.classList.contains('btn-info')) {
         const producto = carrito[e.target.dataset.id];
-        producto.cantidad ++; 
-        carrito[e.target.dataset.id] = {...producto}
+        producto.cantidad++;
+        carrito[e.target.dataset.id] = {
+            ...producto
+        }
         pintarCarrito()
     }
 
     // DISMINUIR PRODUCTO
-    if(e.target.classList.contains('btn-danger')){
+    if (e.target.classList.contains('btn-danger')) {
         const producto = carrito[e.target.dataset.id];
-        producto.cantidad --; 
-        if(producto.cantidad === 0){
+        producto.cantidad--;
+        if (producto.cantidad === 0) {
             delete carrito[e.target.dataset.id]
         }
         pintarCarrito()

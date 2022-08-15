@@ -2,35 +2,84 @@
     "precio": 1000,
     "id": 1,
     "nombre": "Gorro",
-    "imagen": "img/gorro.webp"
+    "imagen": "./img/gorro.webp",
+    "tipo": "Accesorios"
 },
 {
     "precio": 2000,
     "id": 2,
     "nombre": "Remera",
-    "imagen": "img/remerabasica.webp"
+    "imagen": "./img/remerabasica.webp",
+    "tipo": "Remeras"
 },
 {
     "precio": 3000,
     "id": 3,
     "nombre": "Polera",
-    "imagen": "img/remeramlarga.webp"
+    "imagen": "./img/remeramlarga.webp",
+    "tipo": "Abrigos"
+},
+{
+    "precio": 10000,
+    "id": 4,
+    "nombre": "Sweater",
+    "imagen": "./img/sweter.webp",
+    "tipo": "Abrigos"
+},
+{
+    "precio": 11000,
+    "id": 5,
+    "nombre": "Buzo",
+    "imagen": "./img/buzo.webp",
+    "tipo": "Abrigos"
+},
+{
+    "precio": 16000,
+    "id": 6,
+    "nombre": "Campera",
+    "imagen": "./img/parka.webp",
+    "tipo": "Abrigos"
+},
+{
+    "precio": 3500,
+    "id": 7,
+    "nombre": "Camisa mangas cortas",
+    "imagen": "./img/camisamcorta.webp",
+    "tipo": "Camisas"
+},
+{
+    "precio": 2500,
+    "id": 8,
+    "nombre": "Remera Estampada",
+    "imagen": "./img/remeracestampa.webp",
+    "tipo": "Remeras"
 },
 {
     "precio": 4000,
-    "id": 4,
-    "nombre": "Sweater",
-    "imagen": "img/sweter.webp"
+    "id": 9,
+    "nombre": "Camisa mangas largas",
+    "imagen": "./img/camisamlarga.webp",
+    "tipo": "Camisas"
 },
 {
-    "precio": 5000,
-    "id": 5,
-    "nombre": "Buzo",
-    "imagen": "img/buzo.webp"
+    "precio": 2750,
+    "id": 10,
+    "nombre": "Remera mangas largas",
+    "imagen": "./img/remeramlarga.webp",
+    "tipo": "Remeras"
 },
 {
-    "precio": 6000,
-    "id": 6,
-    "nombre": "Campera",
-    "imagen": "img/parka.webp"
-}]
+    "precio": 12000,
+    "id": 11,
+    "nombre": "Borcego",
+    "imagen": "./img/borcego.webp",
+    "tipo": "Calzados"
+},
+{
+    "precio": 9000,
+    "id": 12,
+    "nombre": "Jean",
+    "imagen": "./img/jean.webp",
+    "tipo": "Pantalones"
+}
+]
