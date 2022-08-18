@@ -43,7 +43,25 @@ const fetchData = async () => {
             cards.innerHTML = '';
             const consulta = formulario.value.toLowerCase();
             const filtrado = data.filter(p => p.tipo.toLowerCase() === consulta);
-            pintarCards(filtrado);
+            // console.log(filtrado)            
+            if(filtrado.length === 0){
+                cards.innerHTML = `
+                <h3 class= 'text-center mt-5 mb-2'><strong>Error al filtrar</strong></h3>
+                <p class = 'ms-4'>Pruebe escribiendo alguno de los siguientes tipos:</p>
+                <ul class='ms-5'>
+                <li>Remeras</li>
+                <li>Accesorios</li>
+                <li>Abrigos</li>
+                <li>Camisas</li>
+                <li>Calzados</li>
+                <li>Pantalones</li>
+                </ul>
+
+                <p class = 'text-muted text-center '>*Escribir tal cual aparece en la lista</p>
+                `
+            }else {
+                pintarCards(filtrado);
+            }
         }
         
         boton.addEventListener('click', filtro)
